@@ -4,6 +4,7 @@ import { Value } from "./types";
 import { delay } from "./utils";
 
 async function main() {
+  // Modifier le tableau faultyArray selon les nœuds défectueux souhaités
   const faultyArray = [
     true,
     true,
@@ -17,6 +18,7 @@ async function main() {
     false,
   ];
 
+  // Modifier le tableau initialValues selon les valeurs initiales souhaitées
   const initialValues: Value[] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
   if (initialValues.length !== faultyArray.length)
@@ -28,6 +30,7 @@ async function main() {
   )
     throw new Error("Too many faulty nodes");
 
+  // Lancer le réseau avec les paramètres définis
   await launchNetwork(
     initialValues.length,
     faultyArray.filter((el) => el === true).length,
@@ -35,8 +38,10 @@ async function main() {
     faultyArray
   );
 
+  // Attendre un certain délai
   await delay(200);
 
+  // Démarrer le consensus
   await startConsensus(initialValues.length);
 }
 

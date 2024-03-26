@@ -43,35 +43,38 @@ describe("Ben-Or decentralized consensus algorithm", () => {
 
     it("Can start 2 healthy nodes and 1 faulty node - 2pts", async () => {
       const faultyArray = [true, false, false];
-
+    
       const initialValues: Value[] = [1, 1, 1];
-
+    
       servers = await launchNetwork(
         faultyArray.length,
         faultyArray.filter((el) => el === true).length,
         initialValues,
         faultyArray
       );
-
+    
       await delay(200);
-
+    
       for (let index = 0; index < 3; index++) {
         await fetch(`http://localhost:${BASE_NODE_PORT + index}/status`)
           .then((res) => {
             if (faultyArray[index]) {
-              expect(res.status).toBe(500);
+              expect(res.status).toBe(500); // Vérifiez le code d'état HTTP pour un nœud défectueux
+            } else {
+              expect(res.status).toBe(200); // Vérifiez le code d'état HTTP pour un nœud fonctionnel
             }
             return res.text();
           })
           .then((body: any) => {
             if (faultyArray[index]) {
-              expect(body).toBe("faulty");
+              expect(body).toBe("faulty"); // Vérifiez le corps de la réponse pour un nœud défectueux
             } else {
-              expect(body).toBe("live");
+              expect(body).toBe("live"); // Vérifiez le corps de la réponse pour un nœud fonctionnel
             }
           });
       }
     });
+    
 
     it("Can start 8 healthy nodes and 2 faulty nodes - 2 pts", async () => {
       const faultyArray = [
